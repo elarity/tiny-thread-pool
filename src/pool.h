@@ -2,13 +2,25 @@
 #define TINY_POOL_H 1
 #include <pthread.h>
 
+struct manager_thread {
+    pthread_t manager_tid;
+    int status;
+};
+struct tasker_thread {
+    pthread_t tasker_tid;
+    int status;
+    struct tasker_thread * next;
+};
 struct tiny_thread_pool {
     int min_thread_num;
     int max_thread_num;
     int alive_thread_num;
     int idle_thread_num;
-    pthread_t tasker_tid_set[];
+    struct manager_thread * manager;
+    struct tasker_thread * tasker;
 };
+
+
 
 void * init_thread_pool();
 void * destroy_thread_pool();
